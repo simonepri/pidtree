@@ -27,7 +27,7 @@ test('should parse ps output on Darwin', async t => {
     '   1   430\n' +
     ' 430   432\n' +
     '   1   727\n' +
-    '   1  7166';
+    '   1  7166\n';
 
   mockery.registerMock('child_process', {
     spawn: () => mocks.spawn(stdout, '', null, 0, null),
@@ -54,7 +54,7 @@ test('should parse ps output on *nix', async t => {
     '   1   430\n' +
     ' 430   432\n' +
     '   1   727\n' +
-    '   1  7166';
+    '   1  7166\n';
 
   mockery.registerMock('child_process', {
     spawn: () => mocks.spawn(stdout, '', null, 0, null),
