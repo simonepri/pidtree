@@ -112,7 +112,7 @@ console.log(pids)
 Please if your platform is not supported [file an issue][new issue].
 
 ## CLI
-
+<img src="https://github.com/simonepri/pidtree/raw/refactor/media/cli.gif" alt="pidtree cli" width="400" align="right"/>
 Show a tree of the processes inside your system inside your terminal.
 
 ```bash
