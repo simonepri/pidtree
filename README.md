@@ -85,19 +85,19 @@ pidtree(process.pid, function (err, pids) {
 // Include the given pid in the result array
 pidtree(process.pid, {root: true}, function (err, pids) {
   console.log(pids)
-  // => [727]
+  // => [{ppid: 420, pid: 727}]
 })
 
-// Get all the processes of the System on *nix
-pidtree(1, function (err, pids) {
+// Get all the processes of the System (-1 is a special value of this package)
+pidtree(-1, function (err, pids) {
   console.log(pids)
-  // => [41,45,43,530,47,50, ..., 41241, 32]
+  // => [{ppid: 1, pid: 530}, {ppid: 1, pid: 42}, ..., {ppid: 1, pid: 41241}]
 })
 
 // If no callback is given it returns a promise instead
 const pids = await pidtree(1)
 console.log(pids)
-// => [41,45,43,530,47,50, ..., 41241, 32]
+// => [{ppid: 1, pid: 143}, {ppid: 143, pid: 666}, ..., {ppid: 1, pid: 41241}]
 ```
 
 ## Compatibility
@@ -113,7 +113,7 @@ Please if your platform is not supported [file an issue][new issue].
 
 ## CLI
 
-This package behave similarly to `pgrep -P` on \*unix
+Show a tree of the processes inside your system inside your terminal.
 
 ```bash
 npx pidtree $PPID
@@ -126,24 +126,30 @@ Or don't pass anything if you want all the pids inside your system.
 npx pidtree
 ```
 
+To display the output as a list, similar to the one produced from `pgrep -P $PID`,
+pass the `--list` flag.
+
+```bash
+npx pidtree --list
+```
+
 ## API
 
 <a name="pidtree"></a>
 
-## pidtree(pid, [options], [callback]) ⇒ <code>Promise.&lt;Object&gt;</code>
-Get the list of child pids of the given pid.
+## pidtree(pid, [options], [callback]) ⇒ <code>[Promise.&lt;Array.&lt;Object&gt;&gt;]</code>
+Get the list of children pids of the given pid.
 
 **Kind**: global function  
-**Returns**: <code>Promise.&lt;Object&gt;</code> - Only when the callback is not provided.  
+**Returns**: <code>Promise.&lt;Array.&lt;Object&gt;&gt;</code> - Only when the callback is not provided.  
 **Access**: public  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| pid | <code>Number</code> \| <code>String</code> |  | A pid. |
+| pid | <code>Number</code> \| <code>String</code> |  | A pid. If -1 will return all the pids. |
 | [options] | <code>Object</code> |  | Optional options object. |
-| [options.root] | <code>Boolean</code> | <code>false</code> | Include the provided pid in the list. |
+| [options.root] | <code>Boolean</code> | <code>false</code> | Include the provided pid in the list. Ignored if -1 is passed as pid. |
 | [callback] | <code>function</code> |  | Called when the list is ready. If not provided a promise is returned instead. |
-
 
 ## Related
 - [pidusage][gh:pidusage] -
