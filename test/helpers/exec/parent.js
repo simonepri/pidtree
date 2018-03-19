@@ -8,7 +8,7 @@ var spawned = {};
 var script = path.join('test', 'helpers', 'exec', 'child.js');
 
 for (var i = 0; i < 10; i++) {
-  var child = cp.spawn('node', [script], {windowsHide: true});
+  var child = cp.spawn('node', [script]);
   child.stdout.on(
     'data',
     (child => {
