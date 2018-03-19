@@ -23,7 +23,7 @@
   ],
   "main": "index.js",
   "bin": {
-    "ps-tree": "./bin/pidtree.js"
+    "pidtree": "./bin/pidtree.js"
   },
   "files": [
     "bin",
