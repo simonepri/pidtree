@@ -1,5 +1,4 @@
 import cp from 'child_process';
-import os from 'os';
 import path from 'path';
 
 import test from 'ava';
@@ -7,7 +6,7 @@ import test from 'ava';
 import pify from 'pify';
 import treek from 'tree-kill';
 
-import m from '..';
+import pidtree from '..';
 
 const scripts = {
   parent: path.join(__dirname, 'helpers', 'exec', 'parent.js'),
@@ -15,19 +14,16 @@ const scripts = {
 };
 
 test('should work with a single pid', async t => {
-  let PPID = 1;
-  if (os.platform().startsWith('win')) {
-    PPID = 0;
-  }
-
-  const result = await m(PPID);
+  const result = await pidtree(-1);
 
   t.log(result);
 
   t.true(Array.isArray(result));
 
   result.forEach((p, i) => {
-    t.is(typeof p, 'number', i);
+    t.is(typeof p, 'object', i);
+    t.is(typeof p.ppid, 'number', i);
+    t.is(typeof p.pid, 'number', i);
   });
 });
 
@@ -47,7 +43,7 @@ test('show work with a Parent process which has zero Child processes', async t =
       throw err;
     });
   }
-  const children = await m(child.pid);
+  const children = await pidtree(child.pid);
   await pify(treek)(child.pid);
 
   t.is(children.length, 0, 'There should be no active child processes');
@@ -69,7 +65,7 @@ test('show work with a Parent process which has ten Child processes', async t =>
       throw err;
     });
   }
-  const children = await m(parent.pid);
+  const children = await pidtree(parent.pid);
   await pify(treek)(parent.pid);
 
   t.is(children.length, 10, 'There should be 10 active child processes');
@@ -91,32 +87,32 @@ test('show include the root if the root option is passsed', async t => {
       throw err;
     });
   }
-  const children = await m(child.pid, {root: true});
+  const children = await pidtree(child.pid, {root: true});
   await pify(treek)(child.pid);
 
   t.deepEqual(
     children,
-    [child.pid],
+    [{ppid: process.pid, pid: child.pid}],
     'There should be the root pid in the array'
   );
 });
 
 test('should throw an error if an invalid pid is provided', async t => {
-  let err = await t.throws(m(null));
+  let err = await t.throws(pidtree(null));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(m([]));
+  err = await t.throws(pidtree([]));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(m('invalid'));
+  err = await t.throws(pidtree('invalid'));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(m(-1));
+  err = await t.throws(pidtree(-2));
   t.is(err.message, 'The pid provided is invalid');
 });
 
 test('should throw an error if the pid does not exists', async t => {
-  const err = await t.throws(m(65535));
+  const err = await t.throws(pidtree(65535));
   t.is(err.message, 'No maching pid found');
 });
 
 test.cb("should use the callback if it's provided", t => {
-  m(process.pid, t.end);
+  pidtree(process.pid, t.end);
 });

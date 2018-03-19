@@ -1,5 +1,3 @@
-import os from 'os';
-
 import test from 'ava';
 import mockery from 'mockery';
 
@@ -25,20 +23,16 @@ test.after(() => {
 
 test('should parse wmic output on Windows', async t => {
   const stdout =
-    '' +
-    'ParentProcessId  ProcessId' +
-    os.EOL +
-    '0                777      ' +
-    os.EOL +
-    '777              778      ' +
-    os.EOL +
-    '0                779      ';
+    `ParentProcessId  ProcessId\r\n` +
+    `0                777      \r\n` +
+    `777              778      \r\n` +
+    `0                779      `;
 
   mockery.registerMock('child_process', {
     spawn: () => mocks.spawn(stdout, '', null, 0, null),
   });
   mockery.registerMock('os', {
-    EOL: os.EOL,
+    EOL: '\r\n',
     platform: () => 'linux',
     type: () => 'type',
     release: () => 'release',
@@ -46,14 +40,8 @@ test('should parse wmic output on Windows', async t => {
 
   const wmic = require('../lib/wmic');
 
-  let result = await pify(wmic)(0);
-  t.deepEqual(result, [777, 779, 778]);
-  result = await pify(wmic)(777);
-  t.deepEqual(result, [778]);
-  result = await pify(wmic)(778);
-  t.deepEqual(result, []);
-  result = await pify(wmic)(779);
-  t.deepEqual(result, []);
+  const result = await pify(wmic)();
+  t.deepEqual(result, [[0, 777], [777, 778], [0, 779]]);
 
   mockery.deregisterMock('child_process');
   mockery.deregisterMock('os');

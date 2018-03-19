@@ -4,14 +4,14 @@ import test from 'ava';
 
 import tspan from 'time-span';
 
-import m from '..';
+import pidtree from '..';
 
 async function execute(pid, times) {
   const end = tspan();
   try {
     for (let i = 0; i < times; i++) {
       // eslint-disable-next-line no-await-in-loop
-      await m(pid);
+      await pidtree(pid);
     }
     const time = end();
     return Promise.resolve(time);

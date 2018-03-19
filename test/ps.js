@@ -1,5 +1,3 @@
-import os from 'os';
-
 import test from 'ava';
 import mockery from 'mockery';
 
@@ -25,22 +23,17 @@ test.after(() => {
 
 test('should parse ps output on Darwin', async t => {
   const stdout =
-    '' +
-    '  PID  PPID' +
-    os.EOL +
-    '  430     1' +
-    os.EOL +
-    '  432   430' +
-    os.EOL +
-    '  727     1' +
-    os.EOL +
-    ' 7166     1';
+    'PPID   PID\n' +
+    '   1   430\n' +
+    ' 430   432\n' +
+    '   1   727\n' +
+    '   1  7166';
 
   mockery.registerMock('child_process', {
     spawn: () => mocks.spawn(stdout, '', null, 0, null),
   });
   mockery.registerMock('os', {
-    EOL: os.EOL,
+    EOL: '\n',
     platform: () => 'darwin',
     type: () => 'type',
     release: () => 'release',
@@ -48,12 +41,8 @@ test('should parse ps output on Darwin', async t => {
 
   const ps = require('../lib/ps');
 
-  let result = await pify(ps)(1);
-  t.deepEqual(result, [430, 727, 7166, 432]);
-  result = await pify(ps)(430);
-  t.deepEqual(result, [432]);
-  result = await pify(ps)(432);
-  t.deepEqual(result, []);
+  const result = await pify(ps)();
+  t.deepEqual(result, [[1, 430], [430, 432], [1, 727], [1, 7166]]);
 
   mockery.deregisterMock('child_process');
   mockery.deregisterMock('os');
@@ -61,22 +50,17 @@ test('should parse ps output on Darwin', async t => {
 
 test('should parse ps output on *nix', async t => {
   const stdout =
-    '' +
-    ' PID  PPID' +
-    os.EOL +
-    ' 430     1' +
-    os.EOL +
-    ' 432   430' +
-    os.EOL +
-    ' 727     1' +
-    os.EOL +
-    '7166     1';
+    'PPID   PID\n' +
+    '   1   430\n' +
+    ' 430   432\n' +
+    '   1   727\n' +
+    '   1  7166';
 
   mockery.registerMock('child_process', {
     spawn: () => mocks.spawn(stdout, '', null, 0, null),
   });
   mockery.registerMock('os', {
-    EOL: os.EOL,
+    EOL: '\n',
     platform: () => 'linux',
     type: () => 'type',
     release: () => 'release',
@@ -84,12 +68,8 @@ test('should parse ps output on *nix', async t => {
 
   const ps = require('../lib/ps');
 
-  let result = await pify(ps)(1);
-  t.deepEqual(result, [430, 727, 7166, 432]);
-  result = await pify(ps)(430);
-  t.deepEqual(result, [432]);
-  result = await pify(ps)(432);
-  t.deepEqual(result, []);
+  const result = await pify(ps)();
+  t.deepEqual(result, [[1, 430], [430, 432], [1, 727], [1, 7166]]);
 
   mockery.deregisterMock('child_process');
   mockery.deregisterMock('os');
