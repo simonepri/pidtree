@@ -1,5 +1,7 @@
-let started = false;
-setInterval(() => {
+'use strict';
+
+var started = false;
+setInterval(function() {
   if (started) return;
   console.log(process.pid);
   started = true;
