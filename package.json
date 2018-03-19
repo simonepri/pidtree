@@ -76,7 +76,8 @@
     "space": true,
     "rules": {
       "prefer-arrow-callback": 0,
-      "no-var": 0
+      "no-var": 0,
+      "object-shorthand": 0
     }
   }
 }
