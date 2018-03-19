@@ -32,7 +32,7 @@ test('should work with a single pid', async t => {
 });
 
 test('show work with a Parent process which has zero Child processes', async t => {
-  const child = cp.spawn('node', [scripts.child], {windowsHide: true});
+  const child = cp.spawn('node', [scripts.child]);
 
   try {
     await new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ test('show work with a Parent process which has zero Child processes', async t =
 });
 
 test('show work with a Parent process which has ten Child processes', async t => {
-  const parent = cp.spawn('node', [scripts.parent], {windowsHide: true});
+  const parent = cp.spawn('node', [scripts.parent]);
 
   try {
     await new Promise((resolve, reject) => {
@@ -76,7 +76,7 @@ test('show work with a Parent process which has ten Child processes', async t =>
 });
 
 test('show include the root if the root option is passsed', async t => {
-  const child = cp.spawn('node', [scripts.child], {windowsHide: true});
+  const child = cp.spawn('node', [scripts.child]);
 
   try {
     await new Promise((resolve, reject) => {
