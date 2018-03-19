@@ -106,6 +106,14 @@ pidtree(1, function (err, stat) {
 
 Please if your platform is not supported [file an issue][new issue].
 
+## CLI
+This package behave similar to `pgrep` on \*unix
+
+```bash
+npx pidtree $PPID
+```
+Just replace $PPID with one of the pids inside your system.
+
 ## API
 
 <a name="pidtree"></a>
