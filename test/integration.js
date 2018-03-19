@@ -23,7 +23,9 @@ test('should work with a single pid', async t => {
   result.forEach((p, i) => {
     t.is(typeof p, 'object', i);
     t.is(typeof p.ppid, 'number', i);
+    t.false(isNaN(p.ppid), i);
     t.is(typeof p.pid, 'number', i);
+    t.false(isNaN(p.pid), i);
   });
 });
 
