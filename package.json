@@ -19,7 +19,13 @@
     "tree",
     "ppid",
     "pid",
-    "pidtree"
+    "pidtree",
+    "pgrep",
+    "list",
+    "all",
+    "system",
+    "process",
+    "processes"
   ],
   "main": "index.js",
   "bin": {
