@@ -106,13 +106,20 @@ pidtree(1, function (err, stat) {
 
 Please if your platform is not supported [file an issue][new issue].
 
-## CLI
+## CLI
+
 This package behave similar to `pgrep` on \*unix
 
 ```bash
 npx pidtree $PPID
 ```
-Just replace $PPID with one of the pids inside your system.
+Just replace `$PPID` with one of the pids inside your system.
+
+Or don't pass anything if you want all the pids inside your system.
+
+```bash
+npx pidtree
+```
 
 ## API
 
