@@ -108,7 +108,7 @@ Please if your platform is not supported [file an issue][new issue].
 
 ## CLI
 
-This package behave similar to `pgrep` on \*unix
+This package behave similarly to `pgrep -P` on \*unix
 
 ```bash
 npx pidtree $PPID
