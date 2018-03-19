@@ -67,9 +67,13 @@
   </sub>
 </p>
 
-## Motivation
-The only package that does this simple but tricky job is [ps-tree][gh:ps-tree]
-but the project is unmaintained and furthermore the logic is wrong.
+## Synopsis
+
+This package is really similar to [ps-tree][gh:ps-tree] but is faster, safer and
+provides sub-children results.  
+Furthermore ps-tree is [unmaintained][gh:ps-tree-um].
+
+Uuh, and a fancy [CLI](#cli) is also available!
 
 ## Usage
 
@@ -112,6 +116,7 @@ console.log(pids)
 Please if your platform is not supported [file an issue][new issue].
 
 ## CLI
+
 <img src="https://github.com/simonepri/pidtree/raw/refactor/media/cli.gif" alt="pidtree cli" width="300" align="right"/>
 Show a tree of the processes inside your system inside your terminal.
 
@@ -152,15 +157,18 @@ Get the list of children pids of the given pid.
 | [callback] | <code>function</code> |  | Called when the list is ready. If not provided a promise is returned instead. |
 
 ## Related
+
 - [pidusage][gh:pidusage] -
 Cross-platform process cpu % and memory usage of a PID
 
 ## Authors
+
 - **Simone Primarosa** - [simonepri][github:simonepri]
 
 See also the list of [contributors][contributors] who participated in this project.
 
 ## License
+
 This project is licensed under the MIT License - see the [license][license] file for details.
 
 <!-- Links -->
@@ -172,3 +180,4 @@ This project is licensed under the MIT License - see the [license][license] file
 
 [gh:pidusage]: https://github.com/soyuka/pidusage
 [gh:ps-tree]: https://github.com/indexzero/ps-tree
+[gh:ps-tree-um]: https://github.com/indexzero/ps-tree/issues/30
