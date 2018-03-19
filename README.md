@@ -77,22 +77,27 @@ but the project is unmaintained and furthermore the logic is wrong.
 var pidtree = require('pidtree')
 
 // Get childs of current process
-pidtree(process.pid, function (err, stat) {
-  console.log(stat)
+pidtree(process.pid, function (err, pids) {
+  console.log(pids)
   // => []
 })
 
 // Include the given pid in the result array
-pidtree(process.pid, {root: true}, function (err, stat) {
-  console.log(stat)
+pidtree(process.pid, {root: true}, function (err, pids) {
+  console.log(pids)
   // => [727]
 })
 
 // Get all the processes of the System on *nix
-pidtree(1, function (err, stat) {
-  console.log(stat)
+pidtree(1, function (err, pids) {
+  console.log(pids)
   // => [41,45,43,530,47,50, ..., 41241, 32]
 })
+
+// If no callback is given it returns a promise instead
+const pids = await pidtree(1)
+console.log(pids)
+// => [41,45,43,530,47,50, ..., 41241, 32]
 ```
 
 ## Compatibility
@@ -125,28 +130,20 @@ npx pidtree
 
 <a name="pidtree"></a>
 
-### pidtree(pids, callback)
-Get pid informations.
+## pidtree(pid, [options], [callback]) ⇒ <code>Promise.&lt;Object&gt;</code>
+Get the list of child pids of the given pid.
 
 **Kind**: global function  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - Only when the callback is not provided.  
 **Access**: public  
 
-| Param | Type | Default |Description |
+| Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| pids | <code>Number</code> \| <code>String</code> | | A pid. |
-| options | <code>Object</code> | | Optional options object. |
-| options.root | <code>Boolean</code> | false | Include the provided pid in the list. |
-| callback | [<code>pidCallback</code>](#pidCallback) | | Called when the list is ready. |
+| pid | <code>Number</code> \| <code>String</code> |  | A pid. |
+| [options] | <code>Object</code> |  | Optional options object. |
+| [options.root] | <code>Boolean</code> | <code>false</code> | Include the provided pid in the list. |
+| [callback] | <code>function</code> |  | Called when the list is ready. If not provided a promise is returned instead. |
 
-<a name="pidCallback"></a>
-
-### pidCallback : <code>function</code>
-**Kind**: global typedef  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| err | <code>Error</code> | A possible error. |
-| statistics | <code>Array.&lt;Number&gt;</code> | The array containing the child pids. |
 
 ## Related
 - [pidusage][gh:pidusage] -

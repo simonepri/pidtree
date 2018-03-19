@@ -2,7 +2,6 @@ import os from 'os';
 
 import test from 'ava';
 
-import pify from 'pify';
 import tspan from 'time-span';
 
 import m from '..';
@@ -12,7 +11,7 @@ async function execute(pid, times) {
   try {
     for (let i = 0; i < times; i++) {
       // eslint-disable-next-line no-await-in-loop
-      await pify(m)(pid);
+      await m(pid);
     }
     const time = end();
     return Promise.resolve(time);

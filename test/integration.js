@@ -20,7 +20,7 @@ test('should work with a single pid', async t => {
     PPID = 0;
   }
 
-  const result = await pify(m)(PPID);
+  const result = await m(PPID);
 
   t.log(result);
 
@@ -47,7 +47,7 @@ test('show work with a Parent process which has zero Child processes', async t =
       throw err;
     });
   }
-  const children = await pify(m)(child.pid);
+  const children = await m(child.pid);
   await pify(treek)(child.pid);
 
   t.is(children.length, 0, 'There should be no active child processes');
@@ -69,7 +69,7 @@ test('show work with a Parent process which has ten Child processes', async t =>
       throw err;
     });
   }
-  const children = await pify(m)(parent.pid);
+  const children = await m(parent.pid);
   await pify(treek)(parent.pid);
 
   t.is(children.length, 10, 'There should be 10 active child processes');
@@ -91,7 +91,7 @@ test('show include the root if the root option is passsed', async t => {
       throw err;
     });
   }
-  const children = await pify(m)(child.pid, {root: true});
+  const children = await m(child.pid, {root: true});
   await pify(treek)(child.pid);
 
   t.deepEqual(
@@ -102,17 +102,21 @@ test('show include the root if the root option is passsed', async t => {
 });
 
 test('should throw an error if an invalid pid is provided', async t => {
-  let err = await t.throws(pify(m)(null));
+  let err = await t.throws(m(null));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pify(m)([]));
+  err = await t.throws(m([]));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pify(m)('invalid'));
+  err = await t.throws(m('invalid'));
   t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pify(m)(-1));
+  err = await t.throws(m(-1));
   t.is(err.message, 'The pid provided is invalid');
 });
 
 test('should throw an error if the pid does not exists', async t => {
-  const err = await t.throws(pify(m)(65535));
+  const err = await t.throws(m(65535));
   t.is(err.message, 'No maching pid found');
+});
+
+test.cb("should use the callback if it's provided", t => {
+  m(process.pid, t.end);
 });
