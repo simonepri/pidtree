@@ -19,4 +19,4 @@ test_script:
   - npm test
 after_test:
   - npm run bench
-  - npx codecov
+  - npm run coverage

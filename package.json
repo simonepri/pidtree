@@ -45,10 +45,12 @@
     "release": "np",
     "lint": "xo",
     "test": "npm run lint&& nyc ava -m \"!*benchmark*\"",
-    "bench": "ava -m \"*benchmark*\""
+    "bench": "ava -m \"*benchmark*\"",
+    "coverage": "codecov"
   },
   "devDependencies": {
     "ava": "*",
+    "codecov": "*",
     "mockery": "^2.1.0",
     "np": "*",
     "npm-check": "*",
