@@ -131,7 +131,7 @@ Get pid informations.
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>Error</code> | A possible error. |
-| statistics | <code>Array.<Number></code> | The array containing the child pids. |
+| statistics | <code>Array.&lt;Number&gt;</code> | The array containing the child pids. |
 
 ## Related
 - [pidusage][gh:pidusage] -
