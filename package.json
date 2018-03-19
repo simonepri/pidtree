@@ -33,6 +33,7 @@
     "node": ">=0.10"
   },
   "scripts": {
+    "start": "node ./bin/pidtree.js",
     "update": "npm-check -u",
     "release": "np",
     "lint": "xo",

@@ -2,6 +2,8 @@
 
 'use strict';
 
+var os = require('os');
+
 //
 // Change the default parent PID if running
 // under Windows.
@@ -15,5 +17,5 @@ require('..')(process.argv[2] || ppid, (err, data) => {
   if (err) {
     return console.error(err);
   }
-  console.log(data);
+  console.log(data.join(os.EOL));
 });
