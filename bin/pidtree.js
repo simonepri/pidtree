@@ -38,8 +38,8 @@ function tree(ppid) {
       return;
     }
 
-    var fathers = {}; // HasMap of fathers
-    var tree = {}; // Adiacency HasMap
+    var parents = {}; // Hash Map of parents
+    var tree = {}; // Adiacency Hash Map
     while (list.length > 0) {
       var e = list.pop();
       if (tree[e.ppid]) {
@@ -47,12 +47,14 @@ function tree(ppid) {
       } else {
         tree[e.ppid] = [e.pid];
       }
-      fathers[e.pid] = e.ppid;
+      if (ppid === -1) {
+        parents[e.pid] = e.ppid;
+      }
     }
     var roots = [ppid];
     if (ppid === -1) {
       // Get all the roots
-      roots = Object.keys(tree).filter(node => fathers[node] === undefined);
+      roots = Object.keys(tree).filter(node => parents[node] === undefined);
     }
 
     roots.forEach(root => print(tree, root));
