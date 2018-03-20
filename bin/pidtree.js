@@ -55,45 +55,22 @@ function tree(ppid) {
       roots = Object.keys(tree).filter(node => fathers[node] === undefined);
     }
 
-    roots.forEach(root => print(visit(tree, root)));
+    roots.forEach(root => print(tree, root));
   });
 
-  function visit(tree, start) {
-    // Build the tree
-    var root = {pid: start};
-    var stack = [root];
-    while (stack.length > 0) {
-      var cur = stack.pop();
-      if (!tree[cur.pid]) continue;
-      var len = tree[cur.pid].length;
-      for (var j = 0; j < len; j++) {
-        var node = {pid: tree[cur.pid][j]};
-        if (cur.children === undefined) {
-          cur.children = [node];
-        } else {
-          cur.children.push(node);
-        }
-        stack.push(node);
-      }
-      delete tree[cur.pid];
-    }
-    return root;
-  }
-
-  function print(node) {
-    function printBranch(tree, branch) {
+  function print(tree, start) {
+    function printBranch(node, branch) {
       const isGraphHead = branch.length === 0;
-      const children = tree.children || [];
+      const children = tree[node] || [];
 
       let branchHead = '';
       if (!isGraphHead) {
-        branchHead = children && children.length !== 0 ? '┬ ' : '─ ';
+        branchHead = children.length > 0 ? '┬ ' : '─ ';
       }
 
-      var toPrint = tree.pid;
-      console.log(`${branch}${branchHead}${toPrint}`);
+      console.log(`${branch}${branchHead}${node}`);
 
-      let baseBranch = branch;
+      var baseBranch = branch;
       if (!isGraphHead) {
         const isChildOfLastBranch = branch.slice(-2) === '└─';
         baseBranch = branch.slice(0, -2) + (isChildOfLastBranch ? '  ' : '| ');
@@ -109,7 +86,7 @@ function tree(ppid) {
       });
     }
 
-    printBranch(node, '');
+    printBranch(start, '');
   }
 }
 
