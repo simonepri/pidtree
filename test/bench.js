@@ -1,5 +1,3 @@
-import os from 'os';
-
 import test from 'ava';
 
 import tspan from 'time-span';
@@ -22,18 +20,11 @@ async function execute(pid, times) {
 }
 
 test.serial('should execute the benchmark', async t => {
-  let PPID = 1;
-  if (os.platform().startsWith('win')) {
-    PPID = 0;
-  }
-
-  let time = await execute(PPID, 100);
+  let time = await execute(-1, 100);
   t.log(
-    `Get childs of pid:${PPID} 100 times done in ${time.toFixed(3)} ms (${(
-      1000 *
-      100 /
-      time
-    ).toFixed(3)} op/s)`
+    `Get childs of all the system's pids 100 times done in ${time.toFixed(
+      3
+    )} ms (${(1000 * 100 / time).toFixed(3)} op/s)`
   );
 
   time = await execute(process.pid, 100);
