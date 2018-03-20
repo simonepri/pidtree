@@ -1,17 +1,15 @@
-import os from 'os';
-
 import test from 'ava';
 
 import tspan from 'time-span';
 
-import m from '..';
+import pidtree from '..';
 
 async function execute(pid, times) {
   const end = tspan();
   try {
     for (let i = 0; i < times; i++) {
       // eslint-disable-next-line no-await-in-loop
-      await m(pid);
+      await pidtree(pid);
     }
     const time = end();
     return Promise.resolve(time);
@@ -22,18 +20,11 @@ async function execute(pid, times) {
 }
 
 test.serial('should execute the benchmark', async t => {
-  let PPID = 1;
-  if (os.platform().startsWith('win')) {
-    PPID = 0;
-  }
-
-  let time = await execute(PPID, 100);
+  let time = await execute(-1, 100);
   t.log(
-    `Get childs of pid:${PPID} 100 times done in ${time.toFixed(3)} ms (${(
-      1000 *
-      100 /
-      time
-    ).toFixed(3)} op/s)`
+    `Get childs of all the system's pids 100 times done in ${time.toFixed(
+      3
+    )} ms (${(1000 * 100 / time).toFixed(3)} op/s)`
   );
 
   time = await execute(process.pid, 100);

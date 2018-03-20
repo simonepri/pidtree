@@ -3,17 +3,17 @@
   "version": "0.2.0",
   "description": "Cross platform children list of a PID",
   "license": "MIT",
-  "homepage": "http://github.com/simonpri/pidtree#readme",
-  "repository": "github:simonpri/pidtree",
+  "homepage": "http://github.com/simonepri/pidtree#readme",
+  "repository": "github:simonepri/pidtree",
   "bugs": {
-    "url": "https://github.com/simonpri/pidtree/issues",
+    "url": "https://github.com/simonepri/pidtree/issues",
     "email": "simonepri@outlook.com"
   },
   "author": "Simone Primarosa <simonepri@outlook.com> (https://github.com/simonepri)",
   "contributors": [
     "Simone Primarosa <simonepri@outlook.com> (https://github.com/simonepri)"
   ],
-  "keyboards": [
+  "keywords": [
     "ps-tree",
     "ps",
     "tree",
@@ -76,7 +76,8 @@
     "space": true,
     "rules": {
       "prefer-arrow-callback": 0,
-      "no-var": 0
+      "no-var": 0,
+      "object-shorthand": 0
     }
   }
 }

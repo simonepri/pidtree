@@ -67,9 +67,13 @@
   </sub>
 </p>
 
-## Motivation
-The only package that does this simple but tricky job is [ps-tree][gh:ps-tree]
-but the project is unmaintained and furthermore the logic is wrong.
+## Synopsis
+
+This package is really similar to [ps-tree][gh:ps-tree] but is faster, safer and
+provides sub-children results.  
+Furthermore ps-tree is [unmaintained][gh:ps-tree-um].
+
+Uuh, and a fancy [CLI](#cli) is also available!
 
 ## Usage
 
@@ -88,16 +92,22 @@ pidtree(process.pid, {root: true}, function (err, pids) {
   // => [727]
 })
 
-// Get all the processes of the System on *nix
-pidtree(1, function (err, pids) {
+// Get all the processes of the System (-1 is a special value of this package)
+pidtree(-1, function (err, pids) {
   console.log(pids)
-  // => [41,45,43,530,47,50, ..., 41241, 32]
+  // => [530, 42, ..., 41241]
+})
+
+// Include PPID in the results
+pidtree(1, {advanced: true}, function (err, pids) {
+  console.log(pids)
+  // => [{ppid: 1, pid: 530}, {ppid: 1, pid: 42}, ..., {ppid: 1, pid: 41241}]
 })
 
 // If no callback is given it returns a promise instead
 const pids = await pidtree(1)
 console.log(pids)
-// => [41,45,43,530,47,50, ..., 41241, 32]
+// => [141, 42, ..., 15242]
 ```
 
 ## Compatibility
@@ -113,7 +123,8 @@ Please if your platform is not supported [file an issue][new issue].
 
 ## CLI
 
-This package behave similarly to `pgrep -P` on \*unix
+<img src="https://github.com/simonepri/pidtree/raw/refactor/media/cli.gif" alt="pidtree cli" width="300" align="right"/>
+Show a tree of the processes inside your system inside your terminal.
 
 ```bash
 npx pidtree $PPID
@@ -126,35 +137,44 @@ Or don't pass anything if you want all the pids inside your system.
 npx pidtree
 ```
 
+To display the output as a list, similar to the one produced from `pgrep -P $PID`,
+pass the `--list` flag.
+
+```bash
+npx pidtree --list
+```
+
 ## API
 
 <a name="pidtree"></a>
 
-## pidtree(pid, [options], [callback]) ⇒ <code>Promise.&lt;Object&gt;</code>
-Get the list of child pids of the given pid.
+## pidtree(pid, [options], [callback]) ⇒ <code>[Promise.&lt;Array.&lt;Object&gt;&gt;]</code>
+Get the list of children pids of the given pid.
 
 **Kind**: global function  
-**Returns**: <code>Promise.&lt;Object&gt;</code> - Only when the callback is not provided.  
+**Returns**: <code>Promise.&lt;Array.&lt;Object&gt;&gt;</code> - Only when the callback is not provided.  
 **Access**: public  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| pid | <code>Number</code> \| <code>String</code> |  | A pid. |
+| pid | <code>Number</code> \| <code>String</code> |  | A pid. If -1 will return all the pids. |
 | [options] | <code>Object</code> |  | Optional options object. |
-| [options.root] | <code>Boolean</code> | <code>false</code> | Include the provided pid in the list. |
+| [options.root] | <code>Boolean</code> | <code>false</code> | Include the provided pid in the list. Ignored if -1 is passed as pid. |
 | [callback] | <code>function</code> |  | Called when the list is ready. If not provided a promise is returned instead. |
 
-
 ## Related
+
 - [pidusage][gh:pidusage] -
 Cross-platform process cpu % and memory usage of a PID
 
 ## Authors
+
 - **Simone Primarosa** - [simonepri][github:simonepri]
 
 See also the list of [contributors][contributors] who participated in this project.
 
 ## License
+
 This project is licensed under the MIT License - see the [license][license] file for details.
 
 <!-- Links -->
@@ -166,3 +186,4 @@ This project is licensed under the MIT License - see the [license][license] file
 
 [gh:pidusage]: https://github.com/soyuka/pidusage
 [gh:ps-tree]: https://github.com/indexzero/ps-tree
+[gh:ps-tree-um]: https://github.com/indexzero/ps-tree/issues/30
