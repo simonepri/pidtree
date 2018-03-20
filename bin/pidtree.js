@@ -27,12 +27,12 @@ function list(ppid) {
       console.error(err.message);
       return;
     }
-    console.log(list.map(e => e.pid).join(os.EOL));
+    console.log(list.join(os.EOL));
   });
 }
 
 function tree(ppid) {
-  pidtree(ppid, function(err, list) {
+  pidtree(ppid, {advanced: true}, function(err, list) {
     if (err) {
       console.error(err.message);
       return;

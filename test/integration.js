@@ -14,18 +14,24 @@ const scripts = {
 };
 
 test('should work with a single pid', async t => {
-  const result = await pidtree(-1);
-
+  let result = await pidtree(-1, {advanced: true});
   t.log(result);
 
   t.true(Array.isArray(result));
-
   result.forEach((p, i) => {
     t.is(typeof p, 'object', i);
     t.is(typeof p.ppid, 'number', i);
     t.false(isNaN(p.ppid), i);
     t.is(typeof p.pid, 'number', i);
     t.false(isNaN(p.pid), i);
+  });
+
+  result = await pidtree(-1);
+
+  t.true(Array.isArray(result));
+  result.forEach((p, i) => {
+    t.is(typeof p, 'number', i);
+    t.false(isNaN(p), i);
   });
 });
 
@@ -89,7 +95,7 @@ test('show include the root if the root option is passsed', async t => {
       throw err;
     });
   }
-  const children = await pidtree(child.pid, {root: true});
+  const children = await pidtree(child.pid, {root: true, advanced: true});
   await pify(treek)(child.pid);
 
   t.deepEqual(

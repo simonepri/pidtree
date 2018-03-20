@@ -89,11 +89,17 @@ pidtree(process.pid, function (err, pids) {
 // Include the given pid in the result array
 pidtree(process.pid, {root: true}, function (err, pids) {
   console.log(pids)
-  // => [{ppid: 420, pid: 727}]
+  // => [727]
 })
 
 // Get all the processes of the System (-1 is a special value of this package)
 pidtree(-1, function (err, pids) {
+  console.log(pids)
+  // => [530, 42, ..., 41241]
+})
+
+// Include PPID in the results
+pidtree(1, {advanced: true}, function (err, pids) {
   console.log(pids)
   // => [{ppid: 1, pid: 530}, {ppid: 1, pid: 42}, ..., {ppid: 1, pid: 41241}]
 })
@@ -101,7 +107,7 @@ pidtree(-1, function (err, pids) {
 // If no callback is given it returns a promise instead
 const pids = await pidtree(1)
 console.log(pids)
-// => [{ppid: 1, pid: 143}, {ppid: 143, pid: 666}, ..., {ppid: 1, pid: 41241}]
+// => [141, 42, ..., 15242]
 ```
 
 ## Compatibility
