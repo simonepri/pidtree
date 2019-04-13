@@ -27,6 +27,7 @@ function list(ppid) {
       console.error(err.message);
       return;
     }
+
     console.log(list.join(os.EOL));
   });
 }
@@ -47,10 +48,12 @@ function tree(ppid) {
       } else {
         tree[e.ppid] = [e.pid];
       }
+
       if (ppid === -1) {
         parents[e.pid] = e.ppid;
       }
     }
+
     var roots = [ppid];
     if (ppid === -1) {
       // Get all the roots
@@ -102,6 +105,7 @@ function run() {
       ppid = process.argv[i];
     }
   }
+
   if (ppid === undefined) {
     ppid = -1;
   }

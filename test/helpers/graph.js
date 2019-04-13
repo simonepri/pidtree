@@ -11,5 +11,5 @@ async function deepForEach(root, fn) {
 }
 
 module.exports = {
-  deepForEach,
+  deepForEach
 };

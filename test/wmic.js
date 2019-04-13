@@ -9,7 +9,7 @@ test.before(() => {
   mockery.enable({
     warnOnReplace: false,
     warnOnUnregistered: false,
-    useCleanCache: true,
+    useCleanCache: true
   });
 });
 
@@ -29,13 +29,13 @@ test('should parse wmic output on Windows', async t => {
     `0                779      \r\r\n\r\r\n`;
 
   mockery.registerMock('child_process', {
-    spawn: () => mocks.spawn(stdout, '', null, 0, null),
+    spawn: () => mocks.spawn(stdout, '', null, 0, null)
   });
   mockery.registerMock('os', {
     EOL: '\r\n',
     platform: () => 'linux',
     type: () => 'type',
-    release: () => 'release',
+    release: () => 'release'
   });
 
   const wmic = require('../lib/wmic');

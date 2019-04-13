@@ -23,9 +23,10 @@ function spawn(stdout, stderr, error, code, signal) {
   } else {
     ee.stdout.on('end', () => ee.emit('close', code, signal));
   }
+
   return ee;
 }
 
 export default {
-  spawn,
+  spawn
 };

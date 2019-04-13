@@ -10,7 +10,7 @@ import pidtree from '..';
 
 const scripts = {
   parent: path.join(__dirname, 'helpers', 'exec', 'parent.js'),
-  child: path.join(__dirname, 'helpers', 'exec', 'child.js'),
+  child: path.join(__dirname, 'helpers', 'exec', 'child.js')
 };
 
 test('should work with a single pid', async t => {
@@ -45,12 +45,13 @@ test('show work with a Parent process which has zero Child processes', async t =
       child.on('error', reject);
       child.on('exit', reject);
     });
-  } catch (err) {
+  } catch (error) {
     await pify(treek)(child.pid);
     t.notThrows(() => {
-      throw err;
+      throw error;
     });
   }
+
   const children = await pidtree(child.pid);
   await pify(treek)(child.pid);
 
@@ -67,12 +68,13 @@ test('show work with a Parent process which has ten Child processes', async t =>
       parent.on('error', reject);
       parent.on('exit', reject);
     });
-  } catch (err) {
+  } catch (error) {
     await pify(treek)(parent.pid);
     t.notThrows(() => {
-      throw err;
+      throw error;
     });
   }
+
   const children = await pidtree(parent.pid);
   await pify(treek)(parent.pid);
 
@@ -89,12 +91,13 @@ test('show include the root if the root option is passsed', async t => {
       child.on('error', reject);
       child.on('exit', reject);
     });
-  } catch (err) {
+  } catch (error) {
     await pify(treek)(child.pid);
     t.notThrows(() => {
-      throw err;
+      throw error;
     });
   }
+
   const children = await pidtree(child.pid, {root: true, advanced: true});
   await pify(treek)(child.pid);
 

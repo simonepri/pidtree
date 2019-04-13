@@ -14,7 +14,7 @@ var pidtree = require('./lib/pidtree');
 /**
  * Get the list of children pids of the given pid.
  * @public
- * @param  {Number|String} PID A PID. If -1 will return all the pids.
+ * @param  {Number|String} pid A PID. If -1 will return all the pids.
  * @param  {Object} [options] Optional options object.
  * @param  {Boolean} [options.root=false] Include the provided PID in the list.
  * @param  {Boolean} [options.advanced=false] Returns a list of objects in the
@@ -28,10 +28,12 @@ function list(pid, options, callback) {
     callback = options;
     options = undefined;
   }
+
   if (typeof callback === 'function') {
     pidtree(pid, options, callback);
     return;
   }
+
   return pify(pidtree, pid, options);
 }
 
