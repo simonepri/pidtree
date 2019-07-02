@@ -39,7 +39,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">=0.10"
+    "node": ">=6"
   },
   "scripts": {
     "start": "node ./bin/pidtree.js",
@@ -51,7 +51,7 @@
     "coverage": "codecov"
   },
   "devDependencies": {
-    "ava": "*",
+    "ava": "^1.4.1",
     "codecov": "*",
     "mockery": "^2.1.0",
     "np": "*",
@@ -66,6 +66,7 @@
     "xo": "*"
   },
   "ava": {
+    "helpers": ["test/helpers/**"],
     "verbose": true
   },
   "nyc": {

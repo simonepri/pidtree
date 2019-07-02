@@ -18,20 +18,20 @@ test('should work with a single pid', async t => {
   t.log(result);
 
   t.true(Array.isArray(result));
-  result.forEach((p, i) => {
-    t.is(typeof p, 'object', i);
-    t.is(typeof p.ppid, 'number', i);
-    t.false(isNaN(p.ppid), i);
-    t.is(typeof p.pid, 'number', i);
-    t.false(isNaN(p.pid), i);
+  result.forEach(p => {
+    t.is(typeof p, 'object');
+    t.is(typeof p.ppid, 'number');
+    t.false(isNaN(p.ppid));
+    t.is(typeof p.pid, 'number');
+    t.false(isNaN(p.pid));
   });
 
   result = await pidtree(-1);
 
   t.true(Array.isArray(result));
-  result.forEach((p, i) => {
-    t.is(typeof p, 'number', i);
-    t.false(isNaN(p), i);
+  result.forEach(p => {
+    t.is(typeof p, 'number');
+    t.false(isNaN(p));
   });
 });
 
