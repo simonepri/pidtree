@@ -28,13 +28,15 @@
     "processes"
   ],
   "main": "index.js",
+  "types": "index.d.ts",
   "bin": {
     "pidtree": "./bin/pidtree.js"
   },
   "files": [
     "bin",
     "lib",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=0.10"
@@ -44,7 +46,7 @@
     "update": "npm-check -u",
     "release": "np",
     "lint": "xo",
-    "test": "npm run lint&& nyc ava -m \"!*benchmark*\"",
+    "test": "npm run lint && nyc ava -m \"!*benchmark*\" && tsd",
     "bench": "ava -m \"*benchmark*\"",
     "coverage": "codecov"
   },
@@ -60,6 +62,7 @@
     "through": "^2.3.8",
     "time-span": "^3.1.0",
     "tree-kill": "^1.1.0",
+    "tsd": "^0.7.2",
     "xo": "*"
   },
   "ava": {
