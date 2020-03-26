@@ -5,19 +5,25 @@
 var os = require('os');
 var pidtree = require('..');
 
+// The method startsWith is not defined on string objects in node 0.10
+// eslint-disable-next-line no-extend-native
+String.prototype.startsWith = function(suffix) {
+  return this.substring(0, suffix.length) === suffix;
+};
+
 function help() {
-  var help = `  Usage
-    $ pidtree <ppid>
-
-  Options
-    --list                     To print the pids as a list.
-
-  Examples
-    $ pidtree
-    $ pidtree --list
-    $ pidtree 1
-    $ pidtree 1 --list
-`;
+  var help =
+    '  Usage\n' +
+    '  $ pidtree <ppid>\n' +
+    '\n' +
+    'Options\n' +
+    '  --list                     To print the pids as a list.\n' +
+    '\n' +
+    'Examples\n' +
+    '  $ pidtree\n' +
+    '  $ pidtree --list\n' +
+    '  $ pidtree 1\n' +
+    '  $ pidtree 1 --list\n';
   console.log(help);
 }
 
@@ -42,48 +48,52 @@ function tree(ppid) {
     var parents = {}; // Hash Map of parents
     var tree = {}; // Adiacency Hash Map
     while (list.length > 0) {
-      var e = list.pop();
-      if (tree[e.ppid]) {
-        tree[e.ppid].push(e.pid);
+      var element = list.pop();
+      if (tree[element.ppid]) {
+        tree[element.ppid].push(element.pid);
       } else {
-        tree[e.ppid] = [e.pid];
+        tree[element.ppid] = [element.pid];
       }
 
       if (ppid === -1) {
-        parents[e.pid] = e.ppid;
+        parents[element.pid] = element.ppid;
       }
     }
 
     var roots = [ppid];
     if (ppid === -1) {
       // Get all the roots
-      roots = Object.keys(tree).filter(node => parents[node] === undefined);
+      roots = Object.keys(tree).filter(function(node) {
+        return parents[node] === undefined;
+      });
     }
 
-    roots.forEach(root => print(tree, root));
+    roots.forEach(function(root) {
+      print(tree, root);
+    });
   });
 
   function print(tree, start) {
     function printBranch(node, branch) {
-      const isGraphHead = branch.length === 0;
-      const children = tree[node] || [];
+      var isGraphHead = branch.length === 0;
+      var children = tree[node] || [];
 
-      let branchHead = '';
+      var branchHead = '';
       if (!isGraphHead) {
         branchHead = children.length > 0 ? '┬ ' : '─ ';
       }
 
-      console.log(`${branch}${branchHead}${node}`);
+      console.log(branch + branchHead + node);
 
       var baseBranch = branch;
       if (!isGraphHead) {
-        const isChildOfLastBranch = branch.slice(-2) === '└─';
+        var isChildOfLastBranch = branch.slice(-2) === '└─';
         baseBranch = branch.slice(0, -2) + (isChildOfLastBranch ? '  ' : '| ');
       }
 
-      const nextBranch = baseBranch + '├─';
-      const lastBranch = baseBranch + '└─';
-      children.forEach((child, index) => {
+      var nextBranch = baseBranch + '├─';
+      var lastBranch = baseBranch + '└─';
+      children.forEach(function(child, index) {
         printBranch(
           child,
           children.length - 1 === index ? lastBranch : nextBranch
