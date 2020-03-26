@@ -44,23 +44,23 @@
     "update": "npm-check -u",
     "release": "np",
     "lint": "xo",
-    "test": "npm run lint&& nyc ava -m \"!*benchmark*\"",
+    "test": "nyc ava -m \"!*benchmark*\"",
     "bench": "ava -m \"*benchmark*\"",
     "coverage": "codecov"
   },
   "devDependencies": {
-    "ava": "*",
-    "codecov": "*",
+    "ava": "~0.25.0",
+    "codecov": "^3.6.5",
     "mockery": "^2.1.0",
-    "np": "*",
-    "npm-check": "*",
-    "nyc": "*",
-    "pify": "^4.0.1",
+    "np": "^2.20.1",
+    "npm-check": "^5.9.2",
+    "nyc": "^11.6.0",
+    "pify": "^3.0.0",
     "string-to-stream": "^1.1.0",
     "through": "^2.3.8",
-    "time-span": "^3.1.0",
+    "time-span": "^2.0.0",
     "tree-kill": "^1.1.0",
-    "xo": "*"
+    "xo": "~0.20.3"
   },
   "ava": {
     "verbose": true
@@ -80,7 +80,8 @@
       "no-var": 0,
       "object-shorthand": 0,
       "unicorn/no-for-loop": 0,
-      "unicorn/prefer-string-slice": 0
+      "unicorn/prefer-string-slice": 0,
+      "unicorn/string-content": 0
     }
   }
 }
