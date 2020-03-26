@@ -1,6 +1,6 @@
 {
   "name": "pidtree",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Cross platform children list of a PID",
   "license": "MIT",
   "homepage": "http://github.com/simonepri/pidtree#readme",
