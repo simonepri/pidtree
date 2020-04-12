@@ -121,7 +121,7 @@ test('should throw an error if an invalid pid is provided', async t => {
 
 test('should throw an error if the pid does not exists', async t => {
   const err = await t.throws(pidtree(65535));
-  t.is(err.message, 'No maching pid found');
+  t.is(err.message, 'No matching pid found');
 });
 
 test.cb("should use the callback if it's provided", t => {
