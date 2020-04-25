@@ -28,5 +28,5 @@ function spawn(stdout, stderr, error, code, signal) {
 }
 
 export default {
-  spawn
+  spawn,
 };

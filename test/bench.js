@@ -25,14 +25,14 @@ test.serial('should execute the benchmark', async t => {
   t.log(
     `Get childs of all the system's pids 100 times done in ${time.toFixed(
       3
-    )} ms (${((1000 * 100) / time).toFixed(3)} op/s)`
+    )} ms (${(1000 * 100 / time).toFixed(3)} op/s)`
   );
 
   time = await execute(process.pid, 100);
   t.log(
     `Get childs of pid:${process.pid} 100 times done in ${time.toFixed(
       3
-    )} ms (${((1000 * 100) / time).toFixed(3)} op/s)`
+    )} ms (${(1000 * 100 / time).toFixed(3)} op/s)`
   );
 
   t.pass();

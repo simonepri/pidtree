@@ -10,7 +10,7 @@ import pidtree from '..';
 
 const scripts = {
   parent: path.join(__dirname, 'helpers', 'exec', 'parent.js'),
-  child: path.join(__dirname, 'helpers', 'exec', 'child.js')
+  child: path.join(__dirname, 'helpers', 'exec', 'child.js'),
 };
 
 test('should work with a single pid', async t => {

@@ -9,7 +9,7 @@ test.before(() => {
   mockery.enable({
     warnOnReplace: false,
     warnOnUnregistered: false,
-    useCleanCache: true
+    useCleanCache: true,
   });
 });
 
@@ -30,13 +30,13 @@ test('should parse ps output on Darwin', async t => {
     '   1  7166\n';
 
   mockery.registerMock('child_process', {
-    spawn: () => mocks.spawn(stdout, '', null, 0, null)
+    spawn: () => mocks.spawn(stdout, '', null, 0, null),
   });
   mockery.registerMock('os', {
     EOL: '\n',
     platform: () => 'darwin',
     type: () => 'type',
-    release: () => 'release'
+    release: () => 'release',
   });
 
   const ps = require('../lib/ps');
@@ -57,13 +57,13 @@ test('should parse ps output on *nix', async t => {
     '   1  7166\n';
 
   mockery.registerMock('child_process', {
-    spawn: () => mocks.spawn(stdout, '', null, 0, null)
+    spawn: () => mocks.spawn(stdout, '', null, 0, null),
   });
   mockery.registerMock('os', {
     EOL: '\n',
     platform: () => 'linux',
     type: () => 'type',
-    release: () => 'release'
+    release: () => 'release',
   });
 
   const ps = require('../lib/ps');
