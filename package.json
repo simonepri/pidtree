@@ -48,12 +48,10 @@
     "lint": "xo",
     "test": "nyc ava -m \"!*benchmark*\"",
     "types": "tsd",
-    "bench": "ava -m \"*benchmark*\"",
-    "coverage": "codecov"
+    "bench": "ava -m \"*benchmark*\""
   },
   "devDependencies": {
     "ava": "~0.25.0",
-    "codecov": "^3.6.5",
     "mockery": "^2.1.0",
     "np": "^2.20.1",
     "npm-check": "^5.9.2",

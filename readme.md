@@ -2,13 +2,21 @@
   <b>pidtree</b>
 </h1>
 <p align="center">
-  <!-- CI - TravisCI -->
-  <a href="https://travis-ci.org/simonepri/pidtree">
-    <img src="https://img.shields.io/travis/simonepri/pidtree/master.svg?label=MacOS%20%26%20Linux" alt="Mac/Linux Build Status" />
+  <!-- Lint -->
+  <a href="https://github.com/simonepri/pidtree/actions?query=workflow:lint+branch:master">
+    <img src="https://github.com/simonepri/pidtree/workflows/lint/badge.svg?branch=master" alt="Lint status" />
   </a>
-  <!-- CI - AppVeyor -->
-  <a href="https://ci.appveyor.com/project/simonepri/pidtree">
-    <img src="https://img.shields.io/appveyor/ci/simonepri/pidtree/master.svg?label=Windows" alt="Windows Build status" />
+  <!-- Test - macOS -->
+  <a href="https://github.com/simonepri/pidtree/actions?query=workflow:test-macos+branch:master">
+    <img src="https://github.com/simonepri/pidtree/workflows/test-macos/badge.svg?branch=master" alt="Test macOS status" />
+  </a>
+  <!-- Test - Ubuntu -->
+  <a href="https://github.com/simonepri/pidtree/actions?query=workflow:test-ubuntu+branch:master">
+    <img src="https://github.com/simonepri/pidtree/workflows/test-ubuntu/badge.svg?branch=master" alt="Test Ubuntu status" />
+  </a>
+  <!-- Test - Windows -->
+  <a href="https://github.com/simonepri/pidtree/actions?query=workflow:test-windows+branch:master">
+    <img src="https://github.com/simonepri/pidtree/workflows/test-windows/badge.svg?branch=master" alt="Test Windows status" />
   </a>
   <!-- Coverage - Codecov -->
   <a href="https://codecov.io/gh/simonepri/pidtree">
