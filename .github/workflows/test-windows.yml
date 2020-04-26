@@ -11,6 +11,7 @@ jobs:
     runs-on: windows-latest
     name: AVA & TSD & Benchmark & Codecov
     strategy:
+      fail-fast: false
       matrix:
         node: [12, 10, 8, 6, 4]
     steps:
