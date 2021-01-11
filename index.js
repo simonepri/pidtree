@@ -1,7 +1,6 @@
 'use strict';
 
-const { promisify } = require('util');
-
+const util = require('util');
 const pidtree = require('./lib/pidtree');
 
 /**
@@ -27,7 +26,7 @@ function list(pid, options, callback) {
     return;
   }
 
-  return promisify(pidtree)(pid, options);
+  return util.promisify(pidtree)(pid, options);
 }
 
 module.exports = list;
