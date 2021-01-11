@@ -1,21 +1,8 @@
 'use strict';
 
-function pify(fn, arg1, arg2) {
-  return new Promise(function(resolve, reject) {
-    fn(arg1, arg2, function(err, data) {
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
-}
+const { promisify } = require('util');
 
-// The method startsWith is not defined on string objects in node 0.10
-// eslint-disable-next-line no-extend-native
-String.prototype.startsWith = function(suffix) {
-  return this.substring(0, suffix.length) === suffix;
-};
-
-var pidtree = require('./lib/pidtree');
+const pidtree = require('./lib/pidtree');
 
 /**
  * Get the list of children pids of the given pid.
@@ -40,7 +27,7 @@ function list(pid, options, callback) {
     return;
   }
 
-  return pify(pidtree, pid, options);
+  return promisify(pidtree)(pid, options);
 }
 
 module.exports = list;
