@@ -9,14 +9,11 @@ function pify(fn, arg1, arg2) {
   });
 }
 
-/* istanbul ignore next */
-if (!String.prototype.startsWith) {
-  // The method startsWith is not defined on string objects in node 0.10
-  // eslint-disable-next-line no-extend-native
-  String.prototype.startsWith = function(suffix) {
-    return this.substring(0, suffix.length) === suffix;
-  };
-}
+// The method startsWith is not defined on string objects in node 0.10
+// eslint-disable-next-line no-extend-native
+String.prototype.startsWith = function(suffix) {
+  return this.substring(0, suffix.length) === suffix;
+};
 
 var pidtree = require('./lib/pidtree');
 
