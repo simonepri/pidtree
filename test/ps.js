@@ -95,7 +95,7 @@ test('should throw if stderr contains an error', async t => {
 
   const ps = require('../lib/ps');
 
-  await t.throws(pify(ps)())
+  await t.throws(pify(ps)());
 
   mockery.deregisterMock('child_process');
   mockery.deregisterMock('os');
@@ -110,7 +110,14 @@ test('should not throw if stderr contains the "bogus" error message from vscode'
     '   1  7166\n';
 
   mockery.registerMock('child_process', {
-    spawn: () => mocks.spawn(stdout, 'Error: your 131072x1 screen size is bogus. expect trouble', null, 0, null),
+    spawn: () =>
+      mocks.spawn(
+        stdout,
+        'Error: your 131072x1 screen size is bogus. expect trouble',
+        null,
+        0,
+        null
+      ),
   });
   mockery.registerMock('os', {
     EOL: '\n',
