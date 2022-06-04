@@ -37,6 +37,4 @@ jobs:
         run: |
           npm run bench
       - name: Upload coverage to Codecov
-        run: |
-          npm i -g codecov
-          codecov
+        uses: codecov/codecov-action@v2
