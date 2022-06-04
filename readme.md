@@ -26,10 +26,6 @@
   <a href="https://snyk.io/test/github/simonepri/pidtree?targetFile=package.json">
     <img src="https://snyk.io/test/github/simonepri/pidtree/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" />
   </a>
-  <!-- DM - David -->
-  <a href="https://david-dm.org/simonepri/pidtree">
-    <img src="https://david-dm.org/simonepri/pidtree/status.svg" alt="Dependency Status" />
-  </a>
 
   <br/>
 
