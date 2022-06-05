@@ -47,6 +47,7 @@
     "release": "np",
     "lint": "xo",
     "test": "nyc ava -m \"!*benchmark*\"",
+    "test:windows": "ava -m \"!*benchmark*\"",
     "types": "tsd",
     "bench": "ava -m \"*benchmark*\""
   },

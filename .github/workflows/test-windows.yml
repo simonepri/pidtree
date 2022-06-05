@@ -30,11 +30,16 @@ jobs:
           npm install --only=dev
           npm list --dev --depth=0
       - name: Run tests
+        if: ${{ matrix.node <= 6 }}
         run: npm run test
+      - name: Run tests
+        if: ${{ !(matrix.node <= 6) }}
+        run: npm run test:windows
       #- name: Run type checking
       #  run: npm run types
       - name: Run benchmark
         run: |
           npm run bench
       - name: Upload coverage to Codecov
+        if: ${{ matrix.node <= 6 }}
         uses: codecov/codecov-action@v2
