@@ -6,6 +6,10 @@
   <a href="https://www.npmjs.com/package/pidtree">
     <img src="https://img.shields.io/npm/v/pidtree.svg" alt="Latest version on npm" />
   </a>
+  <!-- Downloads - npm -->
+  <a href="https://npm-stat.com/charts.html?package=pidtree">
+    <img src="https://img.shields.io/npm/dt/pidtree.svg" alt="Downloads on npm" />
+  </a>
   <!-- License - MIT -->
   <a href="https://github.com/simonepri/pidtree/tree/master/license">
     <img src="https://img.shields.io/github/license/simonepri/pidtree.svg" alt="Project license" />
