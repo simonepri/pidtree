@@ -39,7 +39,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">= 10"
+    "node": ">= 14"
   },
   "scripts": {
     "start": "node ./bin/pidtree.js",
