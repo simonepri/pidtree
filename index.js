@@ -1,24 +1,7 @@
 'use strict';
 
-function pify(fn, arg1, arg2) {
-  return new Promise(function(resolve, reject) {
-    fn(arg1, arg2, function(err, data) {
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
-}
-
-// Node versions prior to 4.0.0 do not define have `startsWith`.
-/* istanbul ignore if */
-if (!String.prototype.startsWith) {
-  // eslint-disable-next-line no-extend-native
-  String.prototype.startsWith = function(suffix) {
-    return this.substring(0, suffix.length) === suffix;
-  };
-}
-
-var pidtree = require('./lib/pidtree');
+const util = require('node:util');
+const pidtree = require('./lib/pidtree');
 
 /**
  * Get the list of children pids of the given pid.
@@ -43,7 +26,7 @@ function list(pid, options, callback) {
     return;
   }
 
-  return pify(pidtree, pid, options);
+  return util.promisify(pidtree)(pid, options);
 }
 
 module.exports = list;

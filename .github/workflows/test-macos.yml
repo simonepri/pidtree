@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [current, 16, 14, 12, 10, 8, 6, 4]
+        node: [14, 16, 18]
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
