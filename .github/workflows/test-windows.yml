@@ -16,9 +16,9 @@ jobs:
         node: [14, 16, 18]
     steps:
       - name: Setup repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup node ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
       - name: Install lib dependencies
@@ -30,13 +30,16 @@ jobs:
           npm install --only=dev
           npm list --dev --depth=0
       - name: Run tests
+        if: ${{ matrix.node <= 6 }}
         run: npm run test
+      - name: Run tests
+        if: ${{ !(matrix.node <= 6) }}
+        run: npm run test:windows
       #- name: Run type checking
       #  run: npm run types
       - name: Run benchmark
         run: |
           npm run bench
       - name: Upload coverage to Codecov
-        run: |
-          npm i -g codecov
-          codecov
+        if: ${{ matrix.node <= 6 }}
+        uses: codecov/codecov-action@v2

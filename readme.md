@@ -2,6 +2,21 @@
   <b>pidtree</b>
 </h1>
 <p align="center">
+  <!-- Version - npm -->
+  <a href="https://www.npmjs.com/package/pidtree">
+    <img src="https://img.shields.io/npm/v/pidtree.svg" alt="Latest version on npm" />
+  </a>
+  <!-- Downloads - npm -->
+  <a href="https://npm-stat.com/charts.html?package=pidtree">
+    <img src="https://img.shields.io/npm/dt/pidtree.svg" alt="Downloads on npm" />
+  </a>
+  <!-- License - MIT -->
+  <a href="https://github.com/simonepri/pidtree/tree/master/license">
+    <img src="https://img.shields.io/github/license/simonepri/pidtree.svg" alt="Project license" />
+  </a>
+
+  <br/>
+
   <!-- Lint -->
   <a href="https://github.com/simonepri/pidtree/actions?query=workflow:lint+branch:master">
     <img src="https://github.com/simonepri/pidtree/workflows/lint/badge.svg?branch=master" alt="Lint status" />
@@ -26,10 +41,6 @@
   <a href="https://snyk.io/test/github/simonepri/pidtree?targetFile=package.json">
     <img src="https://snyk.io/test/github/simonepri/pidtree/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" />
   </a>
-  <!-- DM - David -->
-  <a href="https://david-dm.org/simonepri/pidtree">
-    <img src="https://david-dm.org/simonepri/pidtree/status.svg" alt="Dependency Status" />
-  </a>
 
   <br/>
 
@@ -52,17 +63,6 @@
   <!-- Release - np -->
   <a href="https://github.com/sindresorhus/np">
     <img src="https://img.shields.io/badge/released_with-np-6c8784.svg" alt="NP Release System used" />
-  </a>
-
-  <br/>
-
-  <!-- Version - npm -->
-  <a href="https://www.npmjs.com/package/pidtree">
-    <img src="https://img.shields.io/npm/v/pidtree.svg" alt="Latest version on npm" />
-  </a>
-  <!-- License - MIT -->
-  <a href="https://github.com/simonepri/pidtree/tree/master/license">
-    <img src="https://img.shields.io/github/license/simonepri/pidtree.svg" alt="Project license" />
   </a>
 </p>
 <p align="center">
