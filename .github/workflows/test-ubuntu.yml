@@ -9,26 +9,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: AVA & TSD & Benchmark & Codecov
     strategy:
       fail-fast: false
       matrix:
-        node: [current, 16, 14, 12, 10, 8, 6, 4]
+        node: [23, 22, 20, 18]
     steps:
       - name: Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node ${{ matrix.node }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Install lib dependencies
+      - name: Install dependencies
         run: |
-          npm install --only=prod
-          npm list --prod --depth=0
-      - name: Install dev dependencies
-        run: |
-          npm install --only=dev
-          npm list --dev --depth=0
+          npm install
+          npm list
       - name: Run tests
         run: npm run test
       #- name: Run type checking
@@ -37,4 +32,4 @@ jobs:
         run: |
           npm run bench
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v5

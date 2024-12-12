@@ -9,15 +9,16 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    name: XO & Prettier
     steps:
       - name: Setup repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v1
-      - name: Install dev dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
         run: |
-          npm install --only=dev
-          npm list --dev --depth=0
+          npm install
+          npm list
       - name: Run lint
         run: npm run lint
