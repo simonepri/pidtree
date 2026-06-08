@@ -48,8 +48,6 @@ jobs:
           node-version: 24
       # Trusted publishing requires npm >= 11.5.1 (Node >= 22.14).
       - run: npm install -g npm@latest
-      - run: node -v && npm -v
-      - run: 'echo "oidc url present: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}; NODE_AUTH_TOKEN set: ${NODE_AUTH_TOKEN:+yes}"'
       # No token and no --provenance flag: with trusted publishing npm
       # authenticates via OIDC and attaches provenance automatically.
       - run: npm publish
