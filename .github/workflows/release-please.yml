@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  # Allows manually re-running the publish step for the current release,
+  # e.g. to recover from a transient npm failure.
+  workflow_dispatch:
 
 # Restrict the default token; each job opts into what it needs.
 permissions: {}
@@ -29,7 +32,7 @@ jobs:
   # the trusted publisher must be configured for pidtree on npmjs.com.
   publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    if: ${{ needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -39,6 +42,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      # Trusted publishing requires npm >= 11.5.0.
+          # Required for npm trusted publishing (OIDC) to authenticate.
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing requires npm >= 11.5.1 (Node >= 22.14).
       - run: npm install -g npm@latest
-      - run: npm publish --provenance
+      - run: node -v && npm -v
+      # No token and no --provenance flag: with trusted publishing npm
+      # authenticates via OIDC and attaches provenance automatically.
+      - run: npm publish
