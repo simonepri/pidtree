@@ -14,7 +14,11 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
+        with:
+          # Pinned: the legacy xo@0.20 toolchain crashes on modern Node
+          # (util.isDate was removed). Revisit when the toolchain is updated.
+          node-version: 14
       - name: Install dev dependencies
         run: |
           npm install --only=dev
