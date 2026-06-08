@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "last-release-sha": "1a25bdd19beb179eebcad17f2cfe9e9268a4bca5",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "pidtree",
+      "skip-changelog": true
+    }
+  }
+}
