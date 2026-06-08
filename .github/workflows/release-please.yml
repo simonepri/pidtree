@@ -39,11 +39,14 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # setup-node must be >= v6: older versions write a placeholder auth
+      # token to .npmrc that npm uses instead of OIDC, breaking trusted
+      # publishing. registry-url is required for OIDC to authenticate.
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
-          # Required for npm trusted publishing (OIDC) to authenticate.
+          node-version: 24
           registry-url: https://registry.npmjs.org
+          package-manager-cache: false
       # Trusted publishing requires npm >= 11.5.1 (Node >= 22.14).
       - run: npm install -g npm@latest
       - run: node -v && npm -v
