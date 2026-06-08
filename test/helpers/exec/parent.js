@@ -1,25 +1,25 @@
-'use strict';
+import cp from 'node:child_process';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-var path = require('path');
-var cp = require('child_process');
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const script = path.join(dirname, 'child.js');
 
-var started = false;
-var spawned = {};
-var script = path.join('test', 'helpers', 'exec', 'child.js');
+let started = false;
+const spawned = {};
 
-for (var i = 0; i < 10; i++) {
-  var child = cp.spawn('node', [script]);
-  child.stdout.on(
-    'data',
-    (child => {
-      spawned[child.pid] = true;
-    }).bind(this, child)
-  );
+for (let i = 0; i < 10; i++) {
+  const child = cp.spawn('node', [script]);
+  child.stdout.on('data', () => {
+    spawned[child.pid] = true;
+  });
 }
 
-setInterval(function() {
+// Prints this process's pid only once all ten children are up, so the test can
+// rely on exactly ten descendants being alive.
+setInterval(() => {
   if (started) return;
   if (Object.keys(spawned).length !== 10) return;
   console.log(process.pid);
   started = true;
-}, 100); // Does nothing, but prevents exit
+}, 100);

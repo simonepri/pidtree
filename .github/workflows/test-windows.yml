@@ -11,37 +11,20 @@ jobs:
     # windows-latest is Windows Server 2025, which ships without wmic, so the
     # integration tests here run against the PowerShell fallback in lib/get.js.
     runs-on: windows-latest
-    name: AVA & TSD & Benchmark & Codecov
     strategy:
       fail-fast: false
+      # Node 26+ is not yet supported by the coverage tool (c8); revisit
+      # "current" once the toolchain catches up.
       matrix:
-        node: [current, 22, 20, 18]
+        node: [24, 22, 20, 18]
     steps:
       - name: Setup repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node ${{ matrix.node }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - name: Install lib dependencies
-        run: |
-          npm install --only=prod
-          npm list --prod --depth=0
-      - name: Install dev dependencies
-        run: |
-          npm install --only=dev
-          npm list --dev --depth=0
+      - name: Install dependencies
+        run: npm install
       - name: Run tests
-        if: ${{ matrix.node <= 6 }}
-        run: npm run test
-      - name: Run tests
-        if: ${{ !(matrix.node <= 6) }}
-        run: npm run test:windows
-      #- name: Run type checking
-      #  run: npm run types
-      - name: Run benchmark
-        run: |
-          npm run bench
-      - name: Upload coverage to Codecov
-        if: ${{ matrix.node <= 6 }}
-        uses: codecov/codecov-action@v2
+        run: npm test

@@ -1,8 +1,8 @@
-'use strict';
+let started = false;
 
-var started = false;
-setInterval(function() {
+// Keeps the process alive and prints its pid once, so the test knows it is up.
+setInterval(() => {
   if (started) return;
   console.log(process.pid);
   started = true;
-}, 100); // Does nothing, but prevents exit
+}, 100);

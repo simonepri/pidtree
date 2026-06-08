@@ -1,129 +1,100 @@
-import cp from 'child_process';
-import path from 'path';
-
+import cp from 'node:child_process';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {promisify} from 'node:util';
 import test from 'ava';
+import treeKill from 'tree-kill';
+import pidtree from '../index.js';
 
-import pify from 'pify';
-import treek from 'tree-kill';
-
-import pidtree from '..';
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const kill = promisify(treeKill);
 
 const scripts = {
-  parent: path.join(__dirname, 'helpers', 'exec', 'parent.js'),
-  child: path.join(__dirname, 'helpers', 'exec', 'child.js'),
+  parent: path.join(dirname, 'helpers', 'exec', 'parent.js'),
+  child: path.join(dirname, 'helpers', 'exec', 'child.js'),
 };
 
-test('should work with a single pid', async t => {
+// Resolves once the spawned helper has printed its pid, meaning it (and all of
+// its own children) are up and running.
+function waitForReady(child) {
+  return new Promise((resolve, reject) => {
+    child.stdout.on('data', (data) => resolve(data.toString()));
+    child.stderr.on('data', (data) => reject(new Error(data.toString())));
+    child.on('error', reject);
+    child.on('exit', () => reject(new Error('the helper exited early')));
+  });
+}
+
+test('should work with a single pid', async (t) => {
   let result = await pidtree(-1, {advanced: true});
-  t.log(result);
-
   t.true(Array.isArray(result));
-  result.forEach((p, i) => {
-    t.is(typeof p, 'object', i);
-    t.is(typeof p.ppid, 'number', i);
-    t.false(isNaN(p.ppid), i);
-    t.is(typeof p.pid, 'number', i);
-    t.false(isNaN(p.pid), i);
-  });
-
-  result = await pidtree(-1);
-
-  t.true(Array.isArray(result));
-  result.forEach((p, i) => {
-    t.is(typeof p, 'number', i);
-    t.false(isNaN(p), i);
-  });
-});
-
-test('show work with a Parent process which has zero Child processes', async t => {
-  const child = cp.spawn('node', [scripts.child]);
-
-  try {
-    await new Promise((resolve, reject) => {
-      child.stdout.on('data', d => resolve(d.toString()));
-      child.stderr.on('data', d => reject(d.toString()));
-      child.on('error', reject);
-      child.on('exit', reject);
-    });
-  } catch (error) {
-    await pify(treek)(child.pid);
-    t.notThrows(() => {
-      throw error;
-    });
+  for (const entry of result) {
+    t.is(typeof entry.ppid, 'number');
+    t.false(Number.isNaN(entry.ppid));
+    t.is(typeof entry.pid, 'number');
+    t.false(Number.isNaN(entry.pid));
   }
 
+  result = await pidtree(-1);
+  t.true(Array.isArray(result));
+  for (const entry of result) {
+    t.is(typeof entry, 'number');
+    t.false(Number.isNaN(entry));
+  }
+});
+
+test('should work with a parent which has zero child processes', async (t) => {
+  const child = cp.spawn('node', [scripts.child]);
+  await waitForReady(child);
+
   const children = await pidtree(child.pid);
-  await pify(treek)(child.pid);
+  await kill(child.pid);
 
   t.is(children.length, 0, 'There should be no active child processes');
 });
 
-test('show work with a Parent process which has ten Child processes', async t => {
+test('should work with a parent which has ten child processes', async (t) => {
   const parent = cp.spawn('node', [scripts.parent]);
-
-  try {
-    await new Promise((resolve, reject) => {
-      parent.stdout.on('data', d => resolve(d.toString()));
-      parent.stderr.on('data', d => reject(d.toString()));
-      parent.on('error', reject);
-      parent.on('exit', reject);
-    });
-  } catch (error) {
-    await pify(treek)(parent.pid);
-    t.notThrows(() => {
-      throw error;
-    });
-  }
+  await waitForReady(parent);
 
   const children = await pidtree(parent.pid);
-  await pify(treek)(parent.pid);
+  await kill(parent.pid);
 
   t.is(children.length, 10, 'There should be 10 active child processes');
 });
 
-test('show include the root if the root option is passsed', async t => {
+test('should include the root when the root option is passed', async (t) => {
   const child = cp.spawn('node', [scripts.child]);
-
-  try {
-    await new Promise((resolve, reject) => {
-      child.stdout.on('data', d => resolve(d.toString()));
-      child.stderr.on('data', d => reject(d.toString()));
-      child.on('error', reject);
-      child.on('exit', reject);
-    });
-  } catch (error) {
-    await pify(treek)(child.pid);
-    t.notThrows(() => {
-      throw error;
-    });
-  }
+  await waitForReady(child);
 
   const children = await pidtree(child.pid, {root: true, advanced: true});
-  await pify(treek)(child.pid);
+  await kill(child.pid);
 
-  t.deepEqual(
-    children,
-    [{ppid: process.pid, pid: child.pid}],
-    'There should be the root pid in the array'
-  );
+  t.deepEqual(children, [{ppid: process.pid, pid: child.pid}]);
 });
 
-test('should throw an error if an invalid pid is provided', async t => {
-  let err = await t.throws(pidtree(null));
-  t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pidtree([]));
-  t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pidtree('invalid'));
-  t.is(err.message, 'The pid provided is invalid');
-  err = await t.throws(pidtree(-2));
-  t.is(err.message, 'The pid provided is invalid');
+test('should throw an error if an invalid pid is provided', async (t) => {
+  for (const bad of [null, [], 'invalid', -2]) {
+    // eslint-disable-next-line no-await-in-loop
+    const error = await t.throwsAsync(pidtree(bad));
+    t.is(error.message, 'The pid provided is invalid');
+  }
 });
 
-test('should throw an error if the pid does not exists', async t => {
-  const err = await t.throws(pidtree(65535));
-  t.is(err.message, 'No matching pid found');
+test('should throw an error if the pid does not exist', async (t) => {
+  const error = await t.throwsAsync(pidtree(65_535));
+  t.is(error.message, 'No matching pid found');
 });
 
-test.cb("should use the callback if it's provided", t => {
-  pidtree(process.pid, t.end);
+test('should use the callback when one is provided', async (t) => {
+  const list = await new Promise((resolve, reject) => {
+    pidtree(process.pid, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+  t.true(Array.isArray(list));
 });
