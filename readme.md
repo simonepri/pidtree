@@ -52,17 +52,17 @@
   <a href="https://github.com/avajs/ava">
     <img src="https://img.shields.io/badge/test_runner-AVA-fb3170.svg" alt="AVA Test Runner used" />
   </a>
-  <!-- Test Coverage - Istanbul -->
-  <a href="https://github.com/istanbuljs/nyc">
-    <img src="https://img.shields.io/badge/test_coverage-NYC-fec606.svg" alt="Istanbul Test Coverage used" />
+  <!-- Test Coverage - c8 -->
+  <a href="https://github.com/bcoe/c8">
+    <img src="https://img.shields.io/badge/test_coverage-c8-fec606.svg" alt="c8 Test Coverage used" />
   </a>
   <!-- Init - ni -->
   <a href="https://github.com/simonepri/ni">
     <img src="https://img.shields.io/badge/initialized_with-ni-e74c3c.svg" alt="NI Scaffolding System used" />
   </a>
-  <!-- Release - np -->
-  <a href="https://github.com/sindresorhus/np">
-    <img src="https://img.shields.io/badge/released_with-np-6c8784.svg" alt="NP Release System used" />
+  <!-- Release - release-please -->
+  <a href="https://github.com/googleapis/release-please">
+    <img src="https://img.shields.io/badge/released_with-release--please-6c8784.svg" alt="release-please Release System used" />
   </a>
 </p>
 <p align="center">
@@ -83,39 +83,44 @@ Furthermore ps-tree is [unmaintained][gh:ps-tree-um].
 
 Uuh, and a fancy [CLI](#cli) is also available!
 
+## Install
+
+```bash
+npm install pidtree
+```
+
+> **Requirements:** pidtree is an [ESM-only][gh:esm] package and requires
+> **Node.js >= 18**. If you need CommonJS (`require`) or support for older
+> Node.js versions, stay on [`pidtree@0.6`](https://www.npmjs.com/package/pidtree/v/0.6.1).
+
 ## Usage
 
 ```js
-var pidtree = require('pidtree')
+import pidtree from 'pidtree'
+// The named import works too: import {pidtree} from 'pidtree'
 
-// Get childs of current process
-pidtree(process.pid, function (err, pids) {
-  console.log(pids)
-  // => []
-})
+// Get children of the current process (a promise is returned)
+const pids = await pidtree(process.pid)
+console.log(pids)
+// => []
 
 // Include the given pid in the result array
-pidtree(process.pid, {root: true}, function (err, pids) {
-  console.log(pids)
-  // => [727]
-})
+console.log(await pidtree(process.pid, {root: true}))
+// => [727]
 
 // Get all the processes of the System (-1 is a special value of this package)
-pidtree(-1, function (err, pids) {
-  console.log(pids)
-  // => [530, 42, ..., 41241]
-})
+console.log(await pidtree(-1))
+// => [530, 42, ..., 41241]
 
-// Include PPID in the results
-pidtree(1, {advanced: true}, function (err, pids) {
-  console.log(pids)
-  // => [{ppid: 1, pid: 530}, {ppid: 1, pid: 42}, ..., {ppid: 1, pid: 41241}]
-})
+// Include the PPID in the results
+console.log(await pidtree(1, {advanced: true}))
+// => [{ppid: 1, pid: 530}, {ppid: 1, pid: 42}, ..., {ppid: 1, pid: 41241}]
 
-// If no callback is given it returns a promise instead
-const pids = await pidtree(1)
-console.log(pids)
-// => [141, 42, ..., 15242]
+// A Node-style callback is also supported instead of a promise
+pidtree(1, function (err, pids) {
+  console.log(pids)
+  // => [141, 42, ..., 15242]
+})
 ```
 
 ## Compatibility
@@ -192,6 +197,7 @@ This project is licensed under the MIT License - see the [license][license] file
 
 [github:simonepri]: https://github.com/simonepri
 
+[gh:esm]: https://nodejs.org/api/esm.html
 [gh:pidusage]: https://github.com/soyuka/pidusage
 [gh:ps-tree]: https://github.com/indexzero/ps-tree
 [gh:ps-tree-um]: https://github.com/indexzero/ps-tree/issues/30

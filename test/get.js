@@ -1,83 +1,75 @@
 import test from 'ava';
-import mockery from 'mockery';
+import {getWindows} from '../lib/get.js';
 
-import pify from 'pify';
-
-test.before(() => {
-  mockery.enable({
-    warnOnReplace: false,
-    warnOnUnregistered: false,
-    useCleanCache: true,
+function call(wmicFn, powershellFn) {
+  return new Promise((resolve, reject) => {
+    getWindows(
+      (error, list) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(list);
+        }
+      },
+      wmicFn,
+      powershellFn,
+    );
   });
-});
-
-test.beforeEach(() => {
-  mockery.resetCache();
-});
-
-test.after(() => {
-  mockery.disable();
-});
-
-function osMock(platform) {
-  return {
-    EOL: '\n',
-    platform: () => platform,
-    type: () => 'type',
-    release: () => 'release',
-  };
 }
 
-test('should use wmic on Windows when it is available', async t => {
-  mockery.registerMock('os', osMock('win32'));
-  mockery.registerMock('./wmic', cb => cb(null, [[0, 100], [100, 101]]));
-  mockery.registerMock('./powershell', () => {
-    t.fail('powershell should not be used when wmic succeeds');
+test('uses wmic on Windows when it is available', async (t) => {
+  let powershellUsed = false;
+  const list = await call(
+    (callback) =>
+      callback(null, [
+        [0, 100],
+        [100, 101],
+      ]),
+    (callback) => {
+      powershellUsed = true;
+      callback(null, []);
+    },
+  );
+  t.false(powershellUsed, 'powershell should not be used when wmic succeeds');
+  t.deepEqual(list, [
+    [0, 100],
+    [100, 101],
+  ]);
+});
+
+test('falls back to powershell when wmic is missing', async (t) => {
+  const enoent = Object.assign(new Error('spawn wmic ENOENT'), {
+    code: 'ENOENT',
   });
-
-  const get = require('../lib/get');
-
-  const result = await pify(get)();
-  t.deepEqual(result, [[0, 100], [100, 101]]);
-
-  mockery.deregisterMock('os');
-  mockery.deregisterMock('./wmic');
-  mockery.deregisterMock('./powershell');
+  const list = await call(
+    (callback) => callback(enoent),
+    (callback) =>
+      callback(null, [
+        [0, 777],
+        [777, 778],
+      ]),
+  );
+  t.deepEqual(list, [
+    [0, 777],
+    [777, 778],
+  ]);
 });
 
-test('should fall back to powershell when wmic is missing on Windows', async t => {
-  const enoent = new Error('spawn wmic ENOENT');
-  enoent.code = 'ENOENT';
-
-  mockery.registerMock('os', osMock('win32'));
-  mockery.registerMock('./wmic', cb => cb(enoent));
-  mockery.registerMock('./powershell', cb => cb(null, [[0, 777], [777, 778]]));
-
-  const get = require('../lib/get');
-
-  const result = await pify(get)();
-  t.deepEqual(result, [[0, 777], [777, 778]]);
-
-  mockery.deregisterMock('os');
-  mockery.deregisterMock('./wmic');
-  mockery.deregisterMock('./powershell');
-});
-
-test('should not fall back to powershell on a non ENOENT wmic error', async t => {
+test('does not fall back to powershell on a non-ENOENT wmic error', async (t) => {
+  let powershellUsed = false;
   const boom = new Error('wmic exploded');
-
-  mockery.registerMock('os', osMock('win32'));
-  mockery.registerMock('./wmic', cb => cb(boom));
-  mockery.registerMock('./powershell', () => {
-    t.fail('powershell should not be used on a generic wmic error');
-  });
-
-  const get = require('../lib/get');
-
-  const err = await t.throws(pify(get)());
-  t.is(err.message, 'wmic exploded');
-
-  mockery.deregisterMock('os');
-  mockery.deregisterMock('./wmic');
-  mockery.deregisterMock('./powershell');
+  const error = await t.throwsAsync(
+    call(
+      (callback) => callback(boom),
+      (callback) => {
+        powershellUsed = true;
+        callback(null, []);
+      },
+    ),
+  );
+  t.false(
+    powershellUsed,
+    'powershell should not be used on a generic wmic error',
+  );
+  t.is(error, boom);
 });
