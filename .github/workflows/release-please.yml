@@ -39,17 +39,17 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      # setup-node must be >= v6: older versions write a placeholder auth
-      # token to .npmrc that npm uses instead of OIDC, breaking trusted
-      # publishing. registry-url is required for OIDC to authenticate.
+      # Intentionally NOT setting registry-url: it makes setup-node write a
+      # placeholder auth token to .npmrc, which npm would use instead of
+      # OIDC. npm defaults to the public registry and uses trusted
+      # publishing when no token is present.
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
-          package-manager-cache: false
       # Trusted publishing requires npm >= 11.5.1 (Node >= 22.14).
       - run: npm install -g npm@latest
       - run: node -v && npm -v
+      - run: 'echo "oidc url present: ${ACTIONS_ID_TOKEN_REQUEST_URL:+yes}; NODE_AUTH_TOKEN set: ${NODE_AUTH_TOKEN:+yes}"'
       # No token and no --provenance flag: with trusted publishing npm
       # authenticates via OIDC and attaches provenance automatically.
       - run: npm publish
